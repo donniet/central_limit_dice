@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Central Limit Dice</title>
+  <meta name="description" content="Roll N six-sided dice, add them up, and watch the histogram of sums become a normal curve — an interactive demonstration of the Central Limit Theorem for AP Statistics.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="viz-root">
+    <header>
+      <div class="intro">
+      <h1>Central Limit Dice</h1>
+      <p class="lede">
+        Roll <strong>N</strong> six-sided dice and add them together. Repeat many times and record each sum.
+        A single die is flat (uniform), but the <em>sum</em> of several dice piles up in the middle —
+        and the more dice you add, the closer the histogram gets to a normal curve.
+        That's the Central Limit Theorem.
+      </p>
+      </div>
+      <a class="share" href="https://difficult-tech.com/central_limit_dice/">
+        <img src="qr.svg" width="112" height="112" alt="QR code linking to difficult-tech.com/central_limit_dice">
+        <span class="share-text">
+          <span class="share-label">Try it on your own device</span>
+          <span class="share-url">difficult-tech.com/<wbr>central_limit_dice</span>
+        </span>
+      </a>
+    </header>
+
+    <section class="controls" aria-label="Controls">
+      <div class="control dice-count">
+        <label for="n-range">Number of dice (N)</label>
+        <div class="n-row">
+          <button type="button" class="step" id="n-minus" aria-label="Fewer dice">−</button>
+          <input type="range" id="n-range" min="1" max="30" value="2">
+          <button type="button" class="step" id="n-plus" aria-label="More dice">+</button>
+          <output id="n-out" for="n-range">2</output>
+        </div>
+      </div>
+
+      <div class="control">
+        <label for="speed">Speed</label>
+        <select id="speed">
+          <option value="2">Slow — 2 rolls/sec</option>
+          <option value="10" selected>Medium — 10 rolls/sec</option>
+          <option value="60">Fast — 60 rolls/sec</option>
+          <option value="500">Faster — 500 rolls/sec</option>
+          <option value="5000">Turbo — 5,000 rolls/sec</option>
+        </select>
+      </div>
+
+      <div class="control buttons">
+        <button type="button" id="play" class="primary">▶ Start rolling</button>
+        <button type="button" id="animate" title="Turbo-roll N = 1, 2, 3 … dice for 5 seconds each, pausing 5 seconds between">✦ Animate</button>
+        <button type="button" id="roll1">Roll once</button>
+        <button type="button" id="roll100">Roll 100</button>
+        <button type="button" id="reset">Reset</button>
+      </div>
+
+      <label class="toggle">
+        <input type="checkbox" id="show-normal" checked>
+        Show normal curve
+      </label>
+
+      <p class="demo-status" id="demo-status" hidden></p>
+    </section>
+
+    <section class="stats" aria-label="Statistics">
+      <div class="stat hero">
+        <span class="label">Rolls</span>
+        <span class="value" id="count" aria-live="off">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">Sample mean x̄</span>
+        <span class="value" id="xbar">—</span>
+        <span class="sub">Theory μ = 3.5N = <span id="mu"></span></span>
+      </div>
+      <div class="stat">
+        <span class="label">Sample SD s</span>
+        <span class="value" id="sd">—</span>
+        <span class="sub">Theory σ = √(35N/12) = <span id="sigma"></span></span>
+      </div>
+      <div class="stat last">
+        <span class="label">Last roll</span>
+        <span class="value" id="last-sum">—</span>
+        <div class="dice" id="dice" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="chart-card" aria-label="Histogram of sums">
+      <div class="chart-head">
+        <h2 id="chart-title">Distribution of the sum of 2 dice</h2>
+        <div class="legend">
+          <span class="key"><span class="swatch bar"></span>Observed proportion</span>
+          <span class="key" id="legend-normal"><span class="swatch line"></span>Normal model N(μ, σ)</span>
+          <span class="key"><span class="swatch hit"></span>Latest roll</span>
+        </div>
+      </div>
+      <div class="chart-wrap" id="chart-wrap">
+        <svg id="chart" viewBox="0 0 800 420" role="img" aria-labelledby="chart-title"></svg>
+        <div class="tooltip" id="tooltip" hidden></div>
+      </div>
+      <p class="note">
+        The x-axis always spans from the smallest possible sum (N, all ones) to the largest (6N, all sixes),
+        so every chart is the same width no matter how many dice you roll. The y-axis shows the proportion of
+        rolls landing on each sum.
+      </p>
+    </section>
+
+    <details class="explain">
+      <summary>Things to try in class</summary>
+      <ul>
+        <li><strong>N = 1:</strong> one die is uniform — every face is equally likely. The normal curve fits poorly.</li>
+        <li><strong>N = 2:</strong> the classic triangle. 7 is most common because it has the most combinations.</li>
+        <li><strong>N = 5 or more:</strong> the shape is already very close to normal, even though each die is uniform.</li>
+        <li>Compare the sample mean x̄ and SD s with the theoretical μ and σ. How many rolls until they're close?</li>
+        <li>Notice how the spread <em>in absolute terms</em> (σ) grows like √N, while the range (5N) grows like N —
+          so relative to the full range, the distribution gets <em>narrower</em> as N increases.</li>
+      </ul>
+    </details>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
